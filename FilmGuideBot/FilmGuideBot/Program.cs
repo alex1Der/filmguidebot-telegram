@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types.InlineQueryResults;
@@ -69,6 +70,20 @@ namespace FilmGuideBot
                     await Bot.SendTextMessageAsync(message.From.Id, text);
                     break;
                 case "/keyboard":
+                    var replyKeyboard = new ReplyKeyboardMarkup(new[]
+                    {
+                        new[]
+                        {
+                            new KeyboardButton("Hello"),
+                            new KeyboardButton("How are you?")
+                        },
+                        new[]
+                        {
+                            new KeyboardButton("Contact") { RequestContact = true },
+                            new KeyboardButton("Geolocation") {RequestLocation = true}
+                        }
+                    });
+                    await Bot.SendTextMessageAsync(message.Chat.Id, "Message", replyMarkup: replyKeyboard);
                     break;
                 case "/info":
                     var inlineKeyboard = new InlineKeyboardMarkup(new[]
