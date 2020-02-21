@@ -8,6 +8,7 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types.InlineQueryResults;
+using Telegram.Bot.Types;
 
 namespace FilmGuideBot
 {
@@ -62,48 +63,46 @@ namespace FilmGuideBot
             switch (message.Text)
             {
                 case "/start":
-                    string text = 
+                    string text =
                         @"Command list:
 /start - start bot 
-/info - output menu 
-/keyboard - output keyboard";
+/genre_selection - contains list of film genres";
+
                     await Bot.SendTextMessageAsync(message.From.Id, text);
                     break;
-                case "/keyboard":
-                    var replyKeyboard = new ReplyKeyboardMarkup(new[]
-                    {
-                        new[]
-                        {
-                            new KeyboardButton("Hello"),
-                            new KeyboardButton("How are you?")
-                        },
-                        new[]
-                        {
-                            new KeyboardButton("Contact") { RequestContact = true },
-                            new KeyboardButton("Geolocation") {RequestLocation = true}
-                        }
-                    });
-                    await Bot.SendTextMessageAsync(message.Chat.Id, "Message", replyMarkup: replyKeyboard);
-                    break;
-                case "/info":
-                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
-                    {
-                        new[]
-                        {
-                            InlineKeyboardButton.WithUrl("VK", "https://vk.com"),
-                            InlineKeyboardButton.WithUrl("GitHub", "https://github.com/alex1Der")
-                        },
-                        new[]
-                        {
-                            InlineKeyboardButton.WithCallbackData("First"),
-                            InlineKeyboardButton.WithCallbackData("Second")
-                        }
-                    });
-                    await Bot.SendTextMessageAsync(message.From.Id, "Choose your destiny:", replyMarkup: inlineKeyboard);
+                case "/genre_selection":
+
+                    ShowFilmGenres(message);
                     break;
                 default:
                     break;
             }
+        }
+
+        async internal static void ShowFilmGenres(Message message)
+        {
+            var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+                        new[]
+                        {
+                            InlineKeyboardButton.WithCallbackData("Comedy"),
+                            InlineKeyboardButton.WithCallbackData("Adventure"),
+                            InlineKeyboardButton.WithCallbackData("Cartoons")
+                        },
+                        new[]
+                        {
+                            InlineKeyboardButton.WithCallbackData("Horror"),
+                            InlineKeyboardButton.WithCallbackData("Thriller"),
+                            InlineKeyboardButton.WithCallbackData("Crime")
+                        },
+                        new[]
+                        {
+                            InlineKeyboardButton.WithCallbackData("Drama"),
+                            InlineKeyboardButton.WithCallbackData("Fantasy"),
+                            InlineKeyboardButton.WithCallbackData("Hirstorical")
+                        }
+                    });
+            await Bot.SendTextMessageAsync(message.From.Id, "Choose your destiny:", replyMarkup: inlineKeyboard);
         }
     }
 }
